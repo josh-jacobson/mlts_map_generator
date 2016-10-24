@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date and time:</strong>
+  <%= @screening.date_and_time %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @screening.address %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @screening.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @screening.longitude %>
+</p>
+
+<%= link_to 'Edit', edit_screening_path(@screening) %> |
+<%= link_to 'Back', screenings_path %>
