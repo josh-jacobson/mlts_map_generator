@@ -14,3 +14,6 @@
 
 # Ignore spreadsheets containing sensitive data
 /xlsx/*
+
+# Ignore map images
+/maps/*
