@@ -1,5 +1,3 @@
-== README
-
 ## MLTS Map Generator
 
 This is small app to generate custom Google Maps showing past MLTS screenings in each state.
