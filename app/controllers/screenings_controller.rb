@@ -6,7 +6,7 @@ class ScreeningsController < ApplicationController
   # GET /screenings.json
   def index
     static_params = ["size=600x400"]
-    markers = Screening.limit(50).select([:latitude, :longitude]).map { |e|  "markers=#{e.latitude.round(1)},#{e.longitude.round(1)}" }
+    markers = Screening.limit(200).select([:latitude, :longitude]).map { |e|  "markers=#{e.latitude.round(1)},#{e.longitude.round(1)}" }
     @url_params = (static_params + markers).join("&")
     # @screenings = Screening.all
     #
@@ -15,7 +15,7 @@ class ScreeningsController < ApplicationController
     end
 
     states = Screening.pluck(:state).uniq
-    screenings_by_state = Screening.limit(500).group_by(&:state)
+    screenings_by_state = Screening.limit(1600).group_by(&:state)
     screenings_by_state.each do |state_screenings|
       state = state_screenings.first
       screening_array = state_screenings.last
