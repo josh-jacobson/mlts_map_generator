@@ -10,6 +10,8 @@ This is small app to generate custom Google Maps showing past MLTS screenings in
 RAILS_ENV=development rake import:screenings
 ```
 ###### Generate the google maps:
-```bash
-TODO
+Start the server then just open up the screenings index route:
 ```
+localhost:3000/screenings
+```
+Map images will be generated automatically for each state and saved in the maps/ directory.
