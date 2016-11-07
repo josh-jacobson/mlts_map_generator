@@ -5,23 +5,20 @@ class ScreeningsController < ApplicationController
   # GET /screenings
   # GET /screenings.json
   def index
-    static_params = ["size=600x400"]
-    markers = Screening.limit(200).select([:latitude, :longitude]).map { |e|  "markers=#{e.latitude.round(1)},#{e.longitude.round(1)}" }
-    @url_params = (static_params + markers).join("&")
-    # @screenings = Screening.all
-    #
+    markers = Screening.limit(700).select([:latitude, :longitude]).map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
+    @static_params = ["size=640x440&markers=icon:https://s15.postimg.org/4ujeca3l7/small_red_circle.png"]
+    @url_params = (@static_params + markers).join("|")
     File.open('maps/all_screenings.png', 'wb') do |fo|
       fo.write open("http://maps.googleapis.com/maps/api/staticmap?#{@url_params}").read
     end
 
     states = Screening.pluck(:state).uniq
-    screenings_by_state = Screening.limit(1600).group_by(&:state)
+    screenings_by_state = Screening.limit(2000).group_by(&:state)
     screenings_by_state.each do |state_screenings|
       state = state_screenings.first
       screening_array = state_screenings.last
-      markers = screening_array.map { |e|  "markers=#{e.latitude.round(1)},#{e.longitude.round(1)}" }
-      url_params = (static_params + markers).join("&")
-      puts url_params
+      markers = screening_array.map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
+      url_params = (@static_params + markers).join("|")
       File.open("maps/#{state}.png", 'wb') do |fo|
         fo.write open("http://maps.googleapis.com/maps/api/staticmap?#{url_params}").read
       end
