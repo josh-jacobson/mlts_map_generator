@@ -5,24 +5,33 @@ class ScreeningsController < ApplicationController
   # GET /screenings
   # GET /screenings.json
   def index
-    markers = Screening.limit(700).select([:latitude, :longitude]).map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
-    @static_params = ["size=640x440&markers=icon:https://s15.postimg.org/4ujeca3l7/small_red_circle.png"]
+    # Generate a map for the US
+    markers = Screening.all.select([:latitude, :longitude]).map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
+    @static_params = ["size=640x440&markers=size:normal"]
     @url_params = (@static_params + markers).join("|")
     File.open('maps/all_screenings.png', 'wb') do |fo|
       fo.write open("http://maps.googleapis.com/maps/api/staticmap?#{@url_params}").read
     end
 
-    states = Screening.pluck(:state).uniq
-    screenings_by_state = Screening.limit(2000).group_by(&:state)
-    screenings_by_state.each do |state_screenings|
-      state = state_screenings.first
-      screening_array = state_screenings.last
-      markers = screening_array.map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
-      url_params = (@static_params + markers).join("|")
-      File.open("maps/#{state}.png", 'wb') do |fo|
-        fo.write open("http://maps.googleapis.com/maps/api/staticmap?#{url_params}").read
-      end
-    end
+    # Generate maps for each state
+    # states = Screening.pluck(:state).uniq
+    # screenings_by_state = Screening.limit(2000).group_by(&:state)
+    # screenings_by_state.each do |state_screenings|
+      # state = state_screenings.first
+      # screening_array = state_screenings.last
+      # if screening_array.length >= 40
+        # static_params = @static_params
+      # else
+        # static_params = ["size=640x440&markers=size:normal"]
+      # end
+      # if screening_array.length >= 15
+        # markers = screening_array.map { |e|  "#{e.latitude.round(1)},#{e.longitude.round(1)}" }
+        # url_params = (static_params + markers).join("|")
+        # File.open("maps/#{state}.png", 'wb') do |fo|
+          # fo.write open("http://maps.googleapis.com/maps/api/staticmap?#{url_params}").read
+        # end
+      # end
+    # end
 
   end
 
